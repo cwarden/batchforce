@@ -4,10 +4,19 @@ jobs:
     docker:
       - image: cimg/go:1.21
     steps:
+      - setup_remote_docker:
+          version: 20.10.17
+          docker_layer_caching: true
       - checkout
       - run: go install github.com/tcnksm/ghr@v0.16.0
       - run: sudo apt-get update && sudo apt-get install p7zip-full
       - run: sudo bash -c "curl -L --output - https://github.com/crazy-max/xgo/releases/download/v0.30.0/xgo_0.30.0_linux_amd64.tar.gz | tar xvz -C /usr/local/bin/ ./xgo"
+      - run:
+          command: |
+            sudo chmod 666 /var/run/docker.sock
+            if [ -f /var/run/docker-temp.sock ]; then
+              sudo chmod 666 /var/run/docker-temp.sock
+            fi
       - run: make dist
       - run:
           name: create release
