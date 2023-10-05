@@ -14,7 +14,10 @@ jobs:
             if [ -f /var/run/docker-temp.sock ]; then
               sudo chmod 666 /var/run/docker-temp.sock
             fi
-      - run: make dist
+      - run:
+          command: |
+            export GOPATH=/home/circleci/.go_workspace
+            make dist
       - run:
           name: create release
           command: |
