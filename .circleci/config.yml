@@ -1,12 +1,9 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: cimg/go:1.21
+    machine:
+      image: ubuntu-2204:2023.07.2
     steps:
-      - setup_remote_docker:
-          version: 20.10.17
-          docker_layer_caching: true
       - checkout
       - run: go install github.com/tcnksm/ghr@v0.16.0
       - run: sudo apt-get update && sudo apt-get install p7zip-full
