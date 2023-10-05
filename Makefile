@@ -14,16 +14,19 @@ default:
 install:
 	go install ${LDFLAGS}
 
-$(WINDOWS): checkcmd-x86_64-w64-mingw32-gcc checkcmd-x86_64-w64-mingw32-g++
-	env \
-		GOOS=windows \
-		GOARCH=amd64 \
-		CC=x86_64-w64-mingw32-gcc \
-		CXX=x86_64-w64-mingw32-g++ \
-		CGO_ENABLED=1 \
-		CGO_CFLAGS=-D_WIN32_WINNT=0x0400 \
-		CGO_CXXFLAGS=-D_WIN32_WINNT=0x0400 \
-		go build -v -o $(WINDOWS) ${LDFLAGS} ${PACKAGE}
+#$(WINDOWS): checkcmd-x86_64-w64-mingw32-gcc checkcmd-x86_64-w64-mingw32-g++
+#	env \
+#		GOOS=windows \
+#		GOARCH=amd64 \
+#		CC=x86_64-w64-mingw32-gcc \
+#		CXX=x86_64-w64-mingw32-g++ \
+#		CGO_ENABLED=1 \
+#		CGO_CFLAGS=-D_WIN32_WINNT=0x0400 \
+#		CGO_CXXFLAGS=-D_WIN32_WINNT=0x0400 \
+#		go build -v -o $(WINDOWS) ${LDFLAGS} ${PACKAGE}
+
+$(WINDOWS): checkcmd-xgo
+	xgo -go 1.21 -out $(EXECUTABLE) -dest . ${LDFLAGS} -buildmode default -trimpath -targets windows/amd64 -pkg ${PACKAGE} -x .
 
 $(LINUX): checkcmd-x86_64-linux-gnu-gcc checkcmd-x86_64-linux-gnu-g++
 	env \
